@@ -2,11 +2,14 @@ doctype html
 html
     head
         title First Project
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
     body
         h1 #{title}
-        form(method='POST', action='/articles/add')
-            label Title:
-            input.form-control(name='title', type='text')
-            label Author:
-            input.form-control(name='author', type='text')
-            input.btn.btn-primary(type='submit',value='Submit')
+        .container
+            form(method='POST', action='/articles/add')
+                label Title:
+                input.form-control(name='title', type='text')
+                label Author:
+                input.form-control(name='author', type='text')
+                br
+                input.btn.btn-primary(type='submit',value='Submit')

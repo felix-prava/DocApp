@@ -2,9 +2,11 @@ doctype html
 html
     head
         title First Project
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
     body
-        h1 #{title}
-        ul
-            each article, i in articles
-                li= article.title  
-            li aaabbb
+        .container
+            h1 #{title}
+            ul.list-group
+                each article, i in articles
+                    li.list-group-item
+                        a(href="/article/"+article._id)= article.title

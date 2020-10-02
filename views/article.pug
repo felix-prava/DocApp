@@ -1,0 +1,11 @@
+doctype html
+html
+    head
+        title First Project
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    body
+        .container
+            h1= article.title
+            h5 Written by #{article.author}
+            hr
+            a.btn.btn-default(href='/article/edit/'+article._id) Edit

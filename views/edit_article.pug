@@ -1,0 +1,15 @@
+doctype html
+html
+    head
+        title First Project
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    body
+        h1 #{title}
+        .container
+            form(method='POST', action='/articles/edit/'+article._id)
+                label Title:
+                input.form-control(name='title', type='text', value=article.title)
+                label Author:
+                input.form-control(name='author', type='text', value=article.author)
+                br
+                input.btn.btn-primary(type='submit',value='Edit')
