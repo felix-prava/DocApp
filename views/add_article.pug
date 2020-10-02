@@ -1,0 +1,12 @@
+doctype html
+html
+    head
+        title First Project
+    body
+        h1 #{title}
+        form(method='POST', action='/articles/add')
+            label Title:
+            input.form-control(name='title', type='text')
+            label Author:
+            input.form-control(name='author', type='text')
+            input.btn.btn-primary(type='submit',value='Submit')

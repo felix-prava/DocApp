@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const http = require('http'); 
 const fs = require('fs'); 
 const server = http;
@@ -10,8 +9,14 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const PORT = 3000; 
 
+const app = express();
+//app.use(bodyParser.json());
+app.use(express.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 mongoose.connect('mongodb://localhost/nodekb', {useNewUrlParser: true, useUnifiedTopology: true});
-//mongoose.createConnection('mongodb://localhost/nodekb', {useNewUrlParser: true, useUnifiedTopology: true});
+//mongoose.connect('mongodb://localhost/persondb',  {useNewUrlParser: true, useUnifiedTopology: true});
 let db = mongoose.connection;
 
 //Check connection
@@ -23,8 +28,9 @@ db.once('open', function(){
 db.on('error', function(err){
   console.log(err);
 })
-//Get Modelsnpm start
-let Article = require('./models/article');
+
+//Get Models
+let Articlee = require('./models/article');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -43,14 +49,13 @@ app.get('/second',function(req,res){
 
 //Load the third page
 app.get('/third',function(req,res){
-  Article.find({}, function(err, articles){
+  Articlee.find({}, function(err, articles){
     if (err){
       console.log(err);
     }
     else{
-
       console.log(articles);
-      res.render('index', {
+      res.render('index1', {
         title:'Article',
         articles: articles
       });
@@ -59,8 +64,26 @@ app.get('/third',function(req,res){
   // res.render('index2');
 });
 
+app.get('/articles/add', function(req,res){
+  res.render('add_article',{
+    title:'Add Article'
+  });
+});
 
-//app.use('/', router);
+//Add Submit POST Route
+app.post('/articles/add', function(req,res){
+  let article = new Articlee();
+  article.title = req.body.title;
+  article.author = req.body.author;
+  article.save(function(err){
+    if(err){
+      console.log(err);
+      return;
+    }else{
+      res.redirect('/');
+    }
+  });
+});
+
 console.log('Running at Port 3000');
-
 app.listen(3000);

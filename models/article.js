@@ -1,5 +1,4 @@
 let mongoose = require('mongoose');
-
 //Schema
 let articleSchema = mongoose.Schema({
     title:{
@@ -11,5 +10,4 @@ let articleSchema = mongoose.Schema({
         required: true
     }
 });
-
-let Article = module.exports = mongoose.model('Article', articleSchema);
+let Articlee = module.exports = mongoose.model('Articlee', articleSchema);
