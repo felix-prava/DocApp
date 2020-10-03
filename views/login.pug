@@ -1,0 +1,15 @@
+doctype html
+html
+    head
+        title First Project
+        link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    body
+        .container
+            h1 Login
+            form(method='POST', action='/users/register')
+                label Username:
+                input.form-control(name='username', type='text')
+                label Password:
+                input.form-control(name='password', type='password')
+                br
+                input.btn.btn-primary(type='submit',value='Submit')

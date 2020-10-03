@@ -9,3 +9,8 @@ html
             h5 Written by #{article.author}
             hr
             a.btn.btn-default(href='/article/edit/'+article._id) Edit
+            a.btn.btn-danger.delete-article(href='#',data-id=article._id) Delete
+        script(src='/bower_components/jquery/dist/jquery.js')
+        script(src='/bower_components/bootsrap/dist/js/bootstrap.js')
+        script(src='/js/main.js')
+        script(src='//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')

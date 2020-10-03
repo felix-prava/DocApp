@@ -8,6 +8,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const PORT = 3000; 
+const bcrpypt = require('bcryptjs');
+
 
 const app = express();
 //app.use(bodyParser.json());
@@ -31,6 +33,7 @@ db.on('error', function(err){
 
 //Get Models
 let ArticleModel = require('./models/article');
+let UserModel = require('./models/user');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -54,7 +57,6 @@ app.get('/third',function(req,res){
       console.log(err);
     }
     else{
-      console.log(articles);
       res.render('index1', {
         title:'Article',
         articles: articles
@@ -123,6 +125,51 @@ app.post('/articles/edit/:id', function(req,res){
     }
   });
 });
+
+
+
+
+//Register Form
+app.get('/users/register', function(req, res){
+  res.render('register');
+});
+
+//Register Process
+app.post('/users/register', function(req, res){
+  const name = req.body.name;
+  const email = req.body.email;
+  const username = req.body.username;
+  const password = req.body.password;
+  const password2 = req.body.password2;
+
+  let newUser = new UserModel({
+    name:name,
+    email:email,
+    username:username,
+    password:password
+  });
+  bcrpypt.genSalt(10, function(err, salt){
+    bcrpypt.hash(newUser.password, salt, function(error, hash){
+      if(error){
+        console.log(error);
+      }
+      newUser.password = hash;
+      newUser.save(function(err){
+        if (err){
+          console.log(err);
+          return;
+        }
+        else{
+          res.redirect('/users/login');
+        }
+      })
+    });
+  });
+});
+
+app.get('/users/login', function(req, res){
+  res.render('login');
+})
 
 console.log('Running at Port 3000');
 app.listen(3000);
