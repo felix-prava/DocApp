@@ -9,6 +9,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const PORT = 3000; 
 const bcrpypt = require('bcryptjs');
+const config = require('./config/database');
+const passport = require('passport');
+const flash = require('express-flash');
 
 
 const app = express();
@@ -17,8 +20,8 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://localhost/nodekb', {useNewUrlParser: true, useUnifiedTopology: true});
-//mongoose.connect('mongodb://localhost/persondb',  {useNewUrlParser: true, useUnifiedTopology: true});
+//mongoose.connect('mongodb://localhost/nodekb', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(config.database, {useNewUrlParser: true, useUnifiedTopology: true});
 let db = mongoose.connection;
 
 //Check connection
@@ -39,6 +42,16 @@ app.use(express.static(__dirname + '/public'));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+//Passport Config
+require('./config/passport')(passport);
+//Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+
 
 //Load the first page
 app.get('/',function(req,res){
@@ -128,10 +141,9 @@ app.post('/articles/edit/:id', function(req,res){
 
 
 
-
 //Register Form
 app.get('/users/register', function(req, res){
-  res.render('register');
+  res.render('register.ejs');
 });
 
 //Register Process
@@ -167,9 +179,20 @@ app.post('/users/register', function(req, res){
   });
 });
 
+
+//Login Form
 app.get('/users/login', function(req, res){
   res.render('login');
 })
+
+//Login Process
+app.post('/users/login', function(req, res, next){
+  passport.authenticate('local',{
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+    failureFlash: true
+  })(req, res, next);
+});
 
 console.log('Running at Port 3000');
 app.listen(3000);
